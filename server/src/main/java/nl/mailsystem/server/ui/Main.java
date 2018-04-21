@@ -1,28 +1,46 @@
 package nl.mailsystem.server.ui;
 
-import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import static javafx.fxml.FXMLLoader.load;
+import nl.mailsystem.common.ui.BaseMain;
+import nl.mailsystem.server.ServerGateway;
 
 /**
  * @author Robin Laugs
  */
-public class Main extends Application {
+public class Main extends BaseMain {
 
     private static final String FXML_FILE = "Server.fxml";
-    private static final String SCENE_TITLE = "Server";
+    private static final String STAGE_TITLE = "Server";
+
+    private static ServerGateway gateway;
 
     public static void main(String[] args) {
+        setPosition(args);
+        setController(args);
         launch(args);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setScene(new Scene(load(getClass().getResource(FXML_FILE))));
-        stage.setTitle(SCENE_TITLE);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
+        Parent root = loader.load();
+        ServerFxmlController controller = loader.getController();
+        controller.setGateway(gateway);
+
+        stage.setScene(new Scene(root));
+        stage.setTitle(String.format("%s - %s", STAGE_TITLE, gateway.getDomain()));
+        stage.setX(stagePositionX);
+        stage.setY(stagePositionY);
+        stage.setResizable(false);
         stage.show();
     }
+
+    private static void setController(String[] args) {
+        gateway = new ServerGateway(args[0]);
+    }
+
 
 }
