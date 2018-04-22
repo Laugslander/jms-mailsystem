@@ -14,7 +14,7 @@ import static java.lang.String.format;
  */
 public class Main extends BaseMain {
 
-    private static final String FXML_FILE = "Router.fxml";
+    private static final String FXML_FILE = "/fxml/Router.fxml";
     private static final String STAGE_TITLE = "Router";
 
     private static RouterController routerController;

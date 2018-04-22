@@ -2,8 +2,10 @@ package nl.mailsystem.common.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Singular;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import static java.lang.String.format;
 
@@ -18,7 +20,9 @@ public class Mail implements Serializable {
     private String text;
 
     private MailAddress sender;
-    private MailAddress receiver;
+
+    @Singular
+    private Collection<MailAddress> receivers;
 
     private Mail reply;
 
@@ -26,4 +30,5 @@ public class Mail implements Serializable {
     public String toString() {
         return format("%s - %s", sender, subject);
     }
+
 }

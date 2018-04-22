@@ -14,7 +14,7 @@ import static java.lang.String.format;
  */
 public class Main extends BaseMain {
 
-    private static final String FXML_FILE = "Server.fxml";
+    private static final String FXML_FILE = "/fxml/Server.fxml";
     private static final String STAGE_TITLE = "Server";
 
     private static ServerController serverController;

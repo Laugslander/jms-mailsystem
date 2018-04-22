@@ -11,9 +11,8 @@
                 <HBox.margin>
                     <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
                 </HBox.margin>
-                <TextField fx:id="textFieldSubject" prefHeight="25.0" prefWidth="200.0"
-                           promptText="Subject"/>
                 <TextField fx:id="textFieldTo" prefHeight="25.0" prefWidth="200.0" promptText="To"/>
+                <TextField fx:id="textFieldSubject" prefHeight="25.0" prefWidth="200.0" promptText="Subject"/>
                 <TextArea fx:id="textAreaText" prefHeight="121.0" prefWidth="200.0" promptText="Text"/>
                 <Button fx:id="buttonSend" mnemonicParsing="false" text="Send"/>
             </VBox>
@@ -27,12 +26,12 @@
             <padding>
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
             </padding>
-            <TextField fx:id="textFieldMailSubject" disable="true" editable="false" VBox.vgrow="ALWAYS">
+            <TextField fx:id="textFieldMailSubject" editable="false" VBox.vgrow="ALWAYS">
                 <VBox.margin>
                     <Insets/>
                 </VBox.margin>
             </TextField>
-            <TextArea fx:id="textAreaMailText" disable="true" editable="false" VBox.vgrow="ALWAYS"/>
+            <TextArea fx:id="textAreaMailText" editable="false" VBox.vgrow="ALWAYS"/>
         </VBox>
     </SplitPane>
 </AnchorPane>

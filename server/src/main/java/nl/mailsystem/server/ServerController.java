@@ -51,23 +51,21 @@ public class ServerController {
     }
 
     private void routeMail(Mail mail) {
-        if (clients.contains(mail.getReceiver())) {
-            sendMailToClient(mail);
-        } else {
-            sendMailToRouter(mail);
-        }
+        Collection<MailAddress> receivers = mail.getReceivers();
+        receivers.stream().filter(r -> clients.contains(r)).forEach(r -> sendMailToClient(mail, r));
+        receivers.stream().filter(r -> !clients.contains(r)).forEach(r -> sendMailToRouter(mail, r));
     }
 
-    private void sendMailToClient(Mail mail) {
-        clientGateway.sendMail(mail);
+    private void sendMailToClient(Mail mail, MailAddress receiver) {
+        clientGateway.sendMail(mail, receiver);
 
-        log.log(INFO, format("Mail with subject %s sent to client %s", mail.getSubject(), mail.getReceiver()));
+        log.log(INFO, format("Mail with subject %s sent to client %s", mail.getSubject(), receiver));
     }
 
-    private void sendMailToRouter(Mail mail) {
+    private void sendMailToRouter(Mail mail, MailAddress receiver) {
         // TODO send mail to router
 
-        log.log(INFO, format("Mail with subject %s sent to router for client %s", mail.getSubject(), mail.getReceiver()));
+        log.log(INFO, format("Mail with subject %s sent to router for client %s", mail.getSubject(), receiver));
     }
 
 }

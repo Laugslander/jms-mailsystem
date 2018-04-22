@@ -13,7 +13,12 @@ import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 
 import java.net.URL;
+import java.util.Collection;
 import java.util.ResourceBundle;
+
+import static java.util.Arrays.stream;
+import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Robin Laugs
@@ -47,6 +52,8 @@ public class ClientFxmlController implements Initializable, MailEventListener {
 
         buttonSend.disableProperty().bind(inputCheck);
         buttonSend.setOnMouseClicked(e -> buttonSendClicked());
+
+        listViewMails.setOnMouseClicked(e -> listViewMailsClicked());
     }
 
     @Override
@@ -60,12 +67,27 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         controller.sendMailToServer(mail);
     }
 
+    private void listViewMailsClicked() {
+        Mail mail = listViewMails.getSelectionModel().getSelectedItem();
+
+        if (!isNull(mail)) {
+            textFieldMailSubject.setText(mail.getSubject());
+            textAreaMailText.setText(mail.getText());
+        }
+    }
+
     private Mail assembleMail() {
         return Mail.builder()
                 .subject(textFieldSubject.getText())
                 .text(textAreaText.getText())
-                .receiver(new MailAddress(textFieldTo.getText()))
+                .receivers(assembleReceivers())
                 .build();
+    }
+
+    private Collection<MailAddress> assembleReceivers() {
+        return stream(textFieldTo.getText().split(","))
+                .map(MailAddress::new)
+                .collect(toList());
     }
 
 }

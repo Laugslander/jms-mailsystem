@@ -35,8 +35,8 @@ public abstract class ClientGateway {
         };
     }
 
-    public void sendMail(Mail mail) {
-        MessageSenderGateway mailGateway = new MessageSenderGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, mail.getReceiver()));
+    public void sendMail(Mail mail, MailAddress receiver) {
+        MessageSenderGateway mailGateway = new MessageSenderGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, receiver));
 
         Message message = mailGateway.createObjectMessage(mail);
 

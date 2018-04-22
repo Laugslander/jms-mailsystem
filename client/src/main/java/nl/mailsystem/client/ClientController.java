@@ -8,7 +8,7 @@ import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedList;
 
 import static java.lang.String.format;
 import static java.util.logging.Level.INFO;
@@ -32,7 +32,7 @@ public class ClientController {
     public ClientController(String address) {
         this.address = new MailAddress(address);
 
-        mails = new HashSet<>();
+        mails = new LinkedList<>();
 
         log.log(INFO, format("Client with address %s initialized", this.address));
 
