@@ -1,4 +1,4 @@
-package nl.mailsystem.server.gateway;
+package nl.mailsystem.server.messaging.listener;
 
 import lombok.extern.java.Log;
 import nl.mailsystem.common.domain.MailAddress;
@@ -12,19 +12,19 @@ import javax.jms.ObjectMessage;
 
 import static java.lang.String.format;
 import static java.util.logging.Level.SEVERE;
-import static nl.mailsystem.common.gateway.QueueConstants.CLIENT_REGISTRATION_QUEUE;
+import static nl.mailsystem.common.gateway.QueueConstants.CLIENT_SERVER_REGISTRATION_QUEUE;
 
 /**
  * @author Robin Laugs
  */
 @Log
-public abstract class ClientGateway implements MessageListener {
+public abstract class ClientRegistrationListener implements MessageListener {
 
-    protected ClientGateway(MailDomain domain) {
-        new MessageReceiverGateway(format("%s_%s", CLIENT_REGISTRATION_QUEUE, domain)).setListener(this);
+    protected ClientRegistrationListener(MailDomain domain) {
+        new MessageReceiverGateway(format("%s_%s", CLIENT_SERVER_REGISTRATION_QUEUE, domain)).setListener(this);
     }
 
-    protected abstract void onClientRegistration(MailAddress address);
+    protected abstract void onClientRegistrationMessage(MailAddress address);
 
     @Override
     public void onMessage(Message message) {
@@ -32,9 +32,9 @@ public abstract class ClientGateway implements MessageListener {
             ObjectMessage objectMessage = (ObjectMessage) message;
             MailAddress address = (MailAddress) objectMessage.getObject();
 
-            onClientRegistration(address);
+            onClientRegistrationMessage(address);
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while receiving a message from a client", e);
+            log.log(SEVERE, "An error occurred while receiving a registration message from a client", e);
         }
     }
 

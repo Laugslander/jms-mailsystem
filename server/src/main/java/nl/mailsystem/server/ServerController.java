@@ -2,9 +2,10 @@ package nl.mailsystem.server;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
+import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
-import nl.mailsystem.server.gateway.ClientGateway;
+import nl.mailsystem.server.messaging.ClientGateway;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,19 +24,50 @@ public class ServerController {
 
     private Collection<MailAddress> clients;
 
+    private ClientGateway clientGateway;
+
     public ServerController(String domain) {
         this.domain = new MailDomain(domain);
 
-        this.clients = new HashSet<>();
+        clients = new HashSet<>();
 
-        new ClientGateway(this.domain) {
+        log.log(INFO, format("Server with domain %s initialized", this.domain));
+
+        clientGateway = new ClientGateway(this.domain) {
             @Override
             protected void onClientRegistration(MailAddress address) {
-                clients.add(address);
+                if (clients.add(address)) {
+                    log.log(INFO, format("New client with mail address %s registered", address));
+                }
+            }
 
-                log.log(INFO, format("New client with mail address %s registered", address));
+            @Override
+            protected void onClientMail(Mail mail) {
+                log.log(INFO, format("Mail with subject %s received from client %s", mail.getSubject(), mail.getSender()));
+
+                routeMail(mail);
             }
         };
+    }
+
+    private void routeMail(Mail mail) {
+        if (clients.contains(mail.getReceiver())) {
+            sendMailToClient(mail);
+        } else {
+            sendMailToRouter(mail);
+        }
+    }
+
+    private void sendMailToClient(Mail mail) {
+        clientGateway.sendMail(mail);
+
+        log.log(INFO, format("Mail with subject %s sent to client %s", mail.getSubject(), mail.getReceiver()));
+    }
+
+    private void sendMailToRouter(Mail mail) {
+        // TODO send mail to router
+
+        log.log(INFO, format("Mail with subject %s sent to router for client %s", mail.getSubject(), mail.getReceiver()));
     }
 
 }

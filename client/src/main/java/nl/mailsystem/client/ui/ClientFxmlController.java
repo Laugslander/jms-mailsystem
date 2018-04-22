@@ -1,6 +1,6 @@
 package nl.mailsystem.client.ui;
 
-import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -37,14 +37,18 @@ public class ClientFxmlController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        buttonSend.disableProperty().bind(Bindings.isEmpty(textFieldSubject.getProperties()));
+        BooleanBinding binding = textFieldSubject.textProperty().isEmpty()
+                .or(textFieldTo.textProperty().isEmpty())
+                .or(textAreaText.textProperty().isEmpty());
+
+        buttonSend.disableProperty().bind(binding);
         buttonSend.setOnMouseClicked(e -> buttonSendClicked());
     }
 
     private void buttonSendClicked() {
         Mail mail = assembleMail();
 
-        controller.sendMail(mail);
+        controller.sendMailToServer(mail);
     }
 
     private Mail assembleMail() {
