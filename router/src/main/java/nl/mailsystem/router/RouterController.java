@@ -5,12 +5,12 @@ import lombok.Getter;
 /**
  * @author Robin Laugs
  */
-public class RouterGateway {
+public class RouterController {
 
     @Getter
     private String top;
 
-    public RouterGateway(String top) {
+    public RouterController(String top) {
         this.top = top;
     }
 

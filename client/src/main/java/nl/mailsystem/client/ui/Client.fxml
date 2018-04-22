@@ -1,9 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="nl.mailsystem.client.ui.ClientFxmlController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="nl.mailsystem.client.ui.ClientFxmlController">
+    <SplitPane dividerPositions="0.6" orientation="VERTICAL" prefHeight="400.0" prefWidth="600.0">
+        <HBox prefHeight="240.0" prefWidth="600.0">
+            <VBox prefHeight="200.0" prefWidth="193.0" spacing="15.0">
+                <HBox.margin>
+                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                </HBox.margin>
+                <TextField fx:id="textFieldSubject" prefHeight="25.0" prefWidth="200.0"
+                           promptText="Subject"/>
+                <TextField fx:id="textFieldTo" prefHeight="25.0" prefWidth="200.0" promptText="To"/>
+                <TextArea fx:id="textAreaText" prefHeight="121.0" prefWidth="200.0" promptText="Text"/>
+                <Button fx:id="buttonSend" mnemonicParsing="false" text="Send"/>
+            </VBox>
+            <ListView fx:id="listViewMails" HBox.hgrow="ALWAYS">
+                <HBox.margin>
+                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+                </HBox.margin>
+            </ListView>
+        </HBox>
+        <VBox spacing="15.0">
+            <padding>
+                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+            </padding>
+            <TextField fx:id="textFieldMailSubject" disable="true" editable="false" VBox.vgrow="ALWAYS">
+                <VBox.margin>
+                    <Insets/>
+                </VBox.margin>
+            </TextField>
+            <TextArea fx:id="textAreaMailText" disable="true" editable="false" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </SplitPane>
 </AnchorPane>

@@ -2,13 +2,15 @@ package nl.mailsystem.common.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 import static java.lang.String.format;
 
 /**
  * @author Robin Laugs
  */
 @Data
-public class MailAddress {
+public class MailAddress implements Serializable {
 
     private String local;
     private MailDomain domain;

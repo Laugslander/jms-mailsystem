@@ -2,11 +2,13 @@ package nl.mailsystem.common.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author Robin Laugs
  */
 @Data
-public class MailDomain {
+public class MailDomain implements Serializable {
 
     private String second;
     private String top;

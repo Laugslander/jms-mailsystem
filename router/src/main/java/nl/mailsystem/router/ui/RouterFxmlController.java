@@ -2,7 +2,7 @@ package nl.mailsystem.router.ui;
 
 import javafx.fxml.Initializable;
 import lombok.Setter;
-import nl.mailsystem.router.RouterGateway;
+import nl.mailsystem.router.RouterController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 public class RouterFxmlController implements Initializable {
 
     @Setter
-    private RouterGateway gateway;
+    private RouterController controller;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

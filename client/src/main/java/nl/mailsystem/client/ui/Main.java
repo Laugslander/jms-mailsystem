@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import nl.mailsystem.client.ClientGateway;
+import nl.mailsystem.client.ClientController;
 import nl.mailsystem.common.ui.BaseMain;
 
 /**
@@ -15,7 +15,7 @@ public class Main extends BaseMain {
     private static final String FXML_FILE = "Client.fxml";
     private static final String STAGE_TITLE = "Client";
 
-    private static ClientGateway gateway;
+    private static ClientController clientController;
 
     public static void main(String[] args) {
         setPosition(args);
@@ -27,19 +27,18 @@ public class Main extends BaseMain {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
         Parent root = loader.load();
-        ClientFxmlController controller = loader.getController();
-        controller.setGateway(gateway);
+        ClientFxmlController fxmlController = loader.getController();
+        fxmlController.setController(clientController);
 
         stage.setScene(new Scene(root));
-        stage.setTitle(String.format("%s - %s", STAGE_TITLE, gateway.getAddress()));
+        stage.setTitle(String.format("%s - %s", STAGE_TITLE, clientController.getAddress()));
         stage.setX(stagePositionX);
         stage.setY(stagePositionY);
-        stage.setResizable(false);
         stage.show();
     }
 
     private static void setController(String[] args) {
-        gateway = new ClientGateway(args[0]);
+        clientController = new ClientController(args[0]);
     }
 
 }
