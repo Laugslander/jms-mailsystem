@@ -2,7 +2,7 @@ package nl.mailsystem.client.messaging.listener;
 
 import lombok.extern.java.Log;
 import nl.mailsystem.common.domain.Mail;
-import nl.mailsystem.common.domain.MailDomain;
+import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.gateway.MessageReceiverGateway;
 
 import javax.jms.JMSException;
@@ -18,10 +18,10 @@ import static nl.mailsystem.common.gateway.QueueConstants.SERVER_CLIENT_MAIL_QUE
  * @author Robin Laugs
  */
 @Log
-public abstract class ServerMailListener implements MessageListener {
+public abstract class ServerMailMessageListener implements MessageListener {
 
-    protected ServerMailListener(MailDomain domain) {
-        new MessageReceiverGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, domain)).setListener(this);
+    protected ServerMailMessageListener(MailAddress address) {
+        new MessageReceiverGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, address)).setListener(this);
     }
 
     protected abstract void onServerMailMessage(Mail mail);

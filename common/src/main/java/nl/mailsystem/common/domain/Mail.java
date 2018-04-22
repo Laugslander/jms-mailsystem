@@ -5,6 +5,8 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+import static java.lang.String.format;
+
 /**
  * @author Robin Laugs
  */
@@ -20,4 +22,8 @@ public class Mail implements Serializable {
 
     private Mail reply;
 
+    @Override
+    public String toString() {
+        return format("%s - %s", sender, subject);
+    }
 }

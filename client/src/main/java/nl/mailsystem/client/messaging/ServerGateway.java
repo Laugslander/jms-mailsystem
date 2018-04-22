@@ -1,6 +1,6 @@
 package nl.mailsystem.client.messaging;
 
-import nl.mailsystem.client.messaging.listener.ServerMailListener;
+import nl.mailsystem.client.messaging.listener.ServerMailMessageListener;
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
@@ -20,13 +20,13 @@ public abstract class ServerGateway {
     private final MessageSenderGateway registrationGateway;
     private final MessageSenderGateway mailGateway;
 
-    public ServerGateway(MailAddress address) {
+    protected ServerGateway(MailAddress address) {
         MailDomain domain = address.getDomain();
 
         registrationGateway = new MessageSenderGateway(format("%s_%s", CLIENT_SERVER_REGISTRATION_QUEUE, domain));
         mailGateway = new MessageSenderGateway(format("%s_%s", CLIENT_SERVER_MAIL_QUEUE, domain));
 
-        new ServerMailListener(domain) {
+        new ServerMailMessageListener(address) {
             @Override
             protected void onServerMailMessage(Mail mail) {
                 onServerMail(mail);

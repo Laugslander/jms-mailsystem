@@ -1,11 +1,13 @@
 package nl.mailsystem.router.ui;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import nl.mailsystem.common.ui.BaseMain;
 import nl.mailsystem.router.RouterController;
+
+import java.io.IOException;
+
+import static java.lang.String.format;
 
 /**
  * @author Robin Laugs
@@ -24,17 +26,12 @@ public class Main extends BaseMain {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(FXML_FILE));
-        Parent root = loader.load();
-        RouterFxmlController fxmlController = loader.getController();
-        fxmlController.setController(routerController);
+        loader.setControllerFactory(c -> new RouterFxmlController(routerController));
 
-        stage.setScene(new Scene(root));
-        stage.setTitle(String.format("%s - %s", STAGE_TITLE, routerController.getTop()));
-        stage.setX(stagePositionX);
-        stage.setY(stagePositionY);
-        stage.show();
+        String title = format("%s - %s", STAGE_TITLE, routerController.getTop());
+        initStage(stage, loader, title);
     }
 
     private static void setController(String[] args) {

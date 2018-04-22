@@ -5,8 +5,8 @@ import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
 import nl.mailsystem.common.gateway.MessageSenderGateway;
-import nl.mailsystem.server.messaging.listener.ClientMailListener;
-import nl.mailsystem.server.messaging.listener.ClientRegistrationListener;
+import nl.mailsystem.server.messaging.listener.ClientMailMessageListener;
+import nl.mailsystem.server.messaging.listener.ClientRegistrationMessageListener;
 
 import javax.jms.Message;
 
@@ -19,19 +19,15 @@ import static nl.mailsystem.common.gateway.QueueConstants.SERVER_CLIENT_MAIL_QUE
 @Log
 public abstract class ClientGateway {
 
-    private final MessageSenderGateway mailGateway;
-
     protected ClientGateway(MailDomain domain) {
-        mailGateway = new MessageSenderGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, domain));
-
-        new ClientRegistrationListener(domain) {
+        new ClientRegistrationMessageListener(domain) {
             @Override
             protected void onClientRegistrationMessage(MailAddress address) {
                 onClientRegistration(address);
             }
         };
 
-        new ClientMailListener(domain) {
+        new ClientMailMessageListener(domain) {
             @Override
             protected void onClientMailMessage(Mail mail) {
                 onClientMail(mail);
@@ -40,6 +36,8 @@ public abstract class ClientGateway {
     }
 
     public void sendMail(Mail mail) {
+        MessageSenderGateway mailGateway = new MessageSenderGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, mail.getReceiver()));
+
         Message message = mailGateway.createObjectMessage(mail);
 
         mailGateway.send(message);

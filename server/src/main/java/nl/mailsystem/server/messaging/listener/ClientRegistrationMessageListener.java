@@ -18,9 +18,9 @@ import static nl.mailsystem.common.gateway.QueueConstants.CLIENT_SERVER_REGISTRA
  * @author Robin Laugs
  */
 @Log
-public abstract class ClientRegistrationListener implements MessageListener {
+public abstract class ClientRegistrationMessageListener implements MessageListener {
 
-    protected ClientRegistrationListener(MailDomain domain) {
+    protected ClientRegistrationMessageListener(MailDomain domain) {
         new MessageReceiverGateway(format("%s_%s", CLIENT_SERVER_REGISTRATION_QUEUE, domain)).setListener(this);
     }
 

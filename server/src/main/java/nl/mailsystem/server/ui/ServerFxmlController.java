@@ -1,7 +1,6 @@
 package nl.mailsystem.server.ui;
 
 import javafx.fxml.Initializable;
-import lombok.Setter;
 import nl.mailsystem.server.ServerController;
 
 import java.net.URL;
@@ -12,8 +11,11 @@ import java.util.ResourceBundle;
  */
 public class ServerFxmlController implements Initializable {
 
-    @Setter
-    private ServerController controller;
+    private final ServerController controller;
+
+    ServerFxmlController(ServerController controller) {
+        this.controller = controller;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

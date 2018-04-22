@@ -7,8 +7,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import lombok.Setter;
 import nl.mailsystem.client.ClientController;
+import nl.mailsystem.client.ui.listener.MailEventListener;
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 
@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 /**
  * @author Robin Laugs
  */
-public class ClientFxmlController implements Initializable {
+public class ClientFxmlController implements Initializable, MailEventListener {
 
     @FXML
     private TextField textFieldSubject, textFieldTo, textFieldMailSubject;
@@ -30,19 +30,28 @@ public class ClientFxmlController implements Initializable {
     private Button buttonSend;
 
     @FXML
-    private ListView listViewMails;
+    private ListView<Mail> listViewMails;
 
-    @Setter
-    private ClientController controller;
+    private final ClientController controller;
+
+    ClientFxmlController(ClientController controller) {
+        this.controller = controller;
+        this.controller.setMailEventListener(this);
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        BooleanBinding binding = textFieldSubject.textProperty().isEmpty()
+        BooleanBinding inputCheck = textFieldSubject.textProperty().isEmpty()
                 .or(textFieldTo.textProperty().isEmpty())
                 .or(textAreaText.textProperty().isEmpty());
 
-        buttonSend.disableProperty().bind(binding);
+        buttonSend.disableProperty().bind(inputCheck);
         buttonSend.setOnMouseClicked(e -> buttonSendClicked());
+    }
+
+    @Override
+    public void onMailEvent(Mail mail) {
+        listViewMails.getItems().add(mail);
     }
 
     private void buttonSendClicked() {
