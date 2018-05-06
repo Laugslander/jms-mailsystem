@@ -65,6 +65,8 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         Mail mail = assembleMail();
 
         controller.sendMailToServer(mail);
+
+        clearInput();
     }
 
     private void listViewMailsClicked() {
@@ -86,8 +88,14 @@ public class ClientFxmlController implements Initializable, MailEventListener {
 
     private Collection<MailAddress> assembleReceivers() {
         return stream(textFieldTo.getText().split(","))
-                .map(MailAddress::new)
+                .map(MailAddress::fromString)
                 .collect(toList());
+    }
+
+    private void clearInput() {
+        textFieldTo.clear();
+        textFieldSubject.clear();
+        textAreaText.clear();
     }
 
 }

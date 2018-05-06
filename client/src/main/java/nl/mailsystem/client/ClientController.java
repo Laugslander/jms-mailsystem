@@ -23,18 +23,14 @@ public class ClientController {
     private final MailAddress address;
 
     @Getter
-    private Collection<Mail> mails;
+    private Collection<Mail> mails = new LinkedList<>();
 
     private ServerGateway serverGateway;
 
     private MailEventListener mailEventListener;
 
     public ClientController(String address) {
-        this.address = new MailAddress(address);
-
-        mails = new LinkedList<>();
-
-        log.log(INFO, format("Client with address %s initialized", this.address));
+        this.address = MailAddress.fromString(address);
 
         serverGateway = new ServerGateway(this.address) {
             @Override
@@ -46,6 +42,8 @@ public class ClientController {
                 }
             }
         };
+
+        log.log(INFO, format("Client with address %s initialized", this.address));
     }
 
     public void sendMailToServer(Mail mail) {

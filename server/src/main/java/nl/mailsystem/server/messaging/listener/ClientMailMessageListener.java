@@ -24,8 +24,6 @@ public abstract class ClientMailMessageListener implements MessageListener {
         new MessageReceiverGateway(format("%s_%s", CLIENT_SERVER_MAIL_QUEUE, domain)).setListener(this);
     }
 
-    protected abstract void onClientMailMessage(Mail mail);
-
     @Override
     public void onMessage(Message message) {
         try {
@@ -37,5 +35,7 @@ public abstract class ClientMailMessageListener implements MessageListener {
             log.log(SEVERE, "An error occurred while receiving a mail message from a client", e);
         }
     }
+
+    protected abstract void onClientMailMessage(Mail mail);
 
 }

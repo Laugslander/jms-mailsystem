@@ -7,13 +7,22 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import static java.lang.System.exit;
+
 /**
  * @author Robin Laugs
  */
 public abstract class BaseMain extends Application {
 
+    private static final int EXIT_STATUS_CODE = 0;
+
     private static double stagePositionX;
     private static double stagePositionY;
+
+    @Override
+    public void stop() {
+        exit(EXIT_STATUS_CODE);
+    }
 
     protected static void setPosition(String[] args) {
         stagePositionX = Double.valueOf(args[1]);

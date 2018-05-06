@@ -24,8 +24,6 @@ public abstract class ServerMailMessageListener implements MessageListener {
         new MessageReceiverGateway(format("%s_%s", SERVER_CLIENT_MAIL_QUEUE, address)).setListener(this);
     }
 
-    protected abstract void onServerMailMessage(Mail mail);
-
     @Override
     public void onMessage(Message message) {
         try {
@@ -37,5 +35,7 @@ public abstract class ServerMailMessageListener implements MessageListener {
             log.log(SEVERE, "An error occurred while receiving a mail message from a server", e);
         }
     }
+
+    protected abstract void onServerMailMessage(Mail mail);
 
 }

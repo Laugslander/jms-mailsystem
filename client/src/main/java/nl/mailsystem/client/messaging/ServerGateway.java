@@ -50,5 +50,4 @@ public abstract class ServerGateway {
 
     protected abstract void onServerMail(Mail mail);
 
-
 }

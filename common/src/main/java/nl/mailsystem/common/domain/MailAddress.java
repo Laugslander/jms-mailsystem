@@ -1,6 +1,8 @@
 package nl.mailsystem.common.domain;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.extern.java.Log;
 
 import java.io.Serializable;
 
@@ -10,15 +12,20 @@ import static java.lang.String.format;
  * @author Robin Laugs
  */
 @Data
+@Builder
+@Log
 public class MailAddress implements Serializable {
 
     private String local;
     private MailDomain domain;
 
-    public MailAddress(String address) {
+    public static MailAddress fromString(String address) {
         String[] data = address.split("@");
-        local = data[0];
-        domain = new MailDomain(data[1]);
+
+        return MailAddress.builder()
+                .local(data[0])
+                .domain(MailDomain.fromString(data[1]))
+                .build();
     }
 
     @Override

@@ -24,8 +24,6 @@ public abstract class ClientRegistrationMessageListener implements MessageListen
         new MessageReceiverGateway(format("%s_%s", CLIENT_SERVER_REGISTRATION_QUEUE, domain)).setListener(this);
     }
 
-    protected abstract void onClientRegistrationMessage(MailAddress address);
-
     @Override
     public void onMessage(Message message) {
         try {
@@ -37,5 +35,7 @@ public abstract class ClientRegistrationMessageListener implements MessageListen
             log.log(SEVERE, "An error occurred while receiving a registration message from a client", e);
         }
     }
+
+    protected abstract void onClientRegistrationMessage(MailAddress address);
 
 }
