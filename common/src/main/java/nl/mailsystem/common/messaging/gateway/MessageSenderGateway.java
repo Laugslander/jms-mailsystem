@@ -1,4 +1,4 @@
-package nl.mailsystem.common.gateway;
+package nl.mailsystem.common.messaging.gateway;
 
 import lombok.extern.java.Log;
 
@@ -13,17 +13,17 @@ import static java.util.logging.Level.SEVERE;
  * @author Robin Laugs
  */
 @Log
-public class MessageSenderGateway extends MessageGateway {
+public class MessageSenderGateway extends BaseMessageGateway {
 
     private MessageProducer producer;
 
-    public MessageSenderGateway(String channel) {
-        super(channel);
+    public MessageSenderGateway(String queue) {
+        super(queue);
 
         try {
             producer = session.createProducer(destination);
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message sender gateway", e);
+            log.log(SEVERE, "An error occurred while setting up a message sender messaging", e);
         }
     }
 

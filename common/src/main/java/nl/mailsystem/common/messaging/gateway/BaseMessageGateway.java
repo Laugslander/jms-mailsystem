@@ -1,4 +1,4 @@
-package nl.mailsystem.common.gateway;
+package nl.mailsystem.common.messaging.gateway;
 
 import lombok.extern.java.Log;
 
@@ -18,7 +18,7 @@ import static javax.naming.Context.PROVIDER_URL;
  * @author Robin Laugs
  */
 @Log
-abstract class MessageGateway {
+abstract class BaseMessageGateway {
 
     private static final String PROVIDER = "tcp://localhost:61616";
     private static final String CONTEXT_FACTORY = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
@@ -28,25 +28,25 @@ abstract class MessageGateway {
     Session session;
     Destination destination;
 
-    MessageGateway(String channel) {
+    BaseMessageGateway(String queue) {
         try {
-            Properties properties = initProperties(channel);
+            Properties properties = initProperties(queue);
             Context context = new InitialContext(properties);
             ConnectionFactory factory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY);
 
             connection = factory.createConnection();
             session = connection.createSession(false, AUTO_ACKNOWLEDGE);
-            destination = (Destination) context.lookup(channel);
+            destination = (Destination) context.lookup(queue);
         } catch (NamingException | JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message gateway", e);
+            log.log(SEVERE, "An error occurred while setting up a message messaging", e);
         }
     }
 
-    private Properties initProperties(String channel) {
+    private Properties initProperties(String queue) {
         Properties properties = new Properties();
         properties.put(PROVIDER_URL, PROVIDER);
         properties.put(INITIAL_CONTEXT_FACTORY, CONTEXT_FACTORY);
-        properties.put(format("queue.%s", channel), channel);
+        properties.put(format("queue.%s", queue), queue);
 
         return properties;
     }

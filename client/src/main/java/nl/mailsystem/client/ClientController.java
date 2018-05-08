@@ -2,7 +2,7 @@ package nl.mailsystem.client;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
-import nl.mailsystem.client.messaging.ServerGateway;
+import nl.mailsystem.client.messaging.gateway.ServerGateway;
 import nl.mailsystem.client.ui.listener.MailEventListener;
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;

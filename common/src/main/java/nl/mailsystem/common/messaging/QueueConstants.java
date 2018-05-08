@@ -1,4 +1,4 @@
-package nl.mailsystem.common.gateway;
+package nl.mailsystem.common.messaging;
 
 import static java.lang.String.format;
 

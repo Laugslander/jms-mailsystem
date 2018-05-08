@@ -6,7 +6,7 @@ import nl.mailsystem.common.domain.Correspondence;
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
-import nl.mailsystem.server.messaging.ClientGateway;
+import nl.mailsystem.server.messaging.gateway.ClientGateway;
 import nl.mailsystem.server.ui.listener.ExternalCorrespondenceEventListener;
 import nl.mailsystem.server.ui.listener.InternalCorrespondenceEventListener;
 

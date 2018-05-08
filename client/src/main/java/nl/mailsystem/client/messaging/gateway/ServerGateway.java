@@ -1,16 +1,16 @@
-package nl.mailsystem.client.messaging;
+package nl.mailsystem.client.messaging.gateway;
 
 import nl.mailsystem.client.messaging.listener.ServerMailMessageListener;
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
-import nl.mailsystem.common.gateway.MessageSenderGateway;
+import nl.mailsystem.common.messaging.gateway.MessageSenderGateway;
 
 import javax.jms.Message;
 
 import static java.lang.String.format;
-import static nl.mailsystem.common.gateway.QueueConstants.CLIENT_SERVER_MAIL_QUEUE;
-import static nl.mailsystem.common.gateway.QueueConstants.CLIENT_SERVER_REGISTRATION_QUEUE;
+import static nl.mailsystem.common.messaging.QueueConstants.CLIENT_SERVER_MAIL_QUEUE;
+import static nl.mailsystem.common.messaging.QueueConstants.CLIENT_SERVER_REGISTRATION_QUEUE;
 
 /**
  * @author Robin Laugs
@@ -28,7 +28,7 @@ public abstract class ServerGateway {
 
         new ServerMailMessageListener(address) {
             @Override
-            protected void onServerMailMessage(Mail mail) {
+            protected void onMessage(Mail mail) {
                 onServerMail(mail);
             }
         };

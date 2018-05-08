@@ -1,4 +1,4 @@
-package nl.mailsystem.common.gateway;
+package nl.mailsystem.common.messaging.gateway;
 
 import lombok.extern.java.Log;
 
@@ -12,19 +12,19 @@ import static java.util.logging.Level.SEVERE;
  * @author Robin Laugs
  */
 @Log
-public class MessageReceiverGateway extends MessageGateway {
+public class MessageReceiverGateway extends BaseMessageGateway {
 
     private MessageConsumer consumer;
 
-    public MessageReceiverGateway(String channel) {
-        super(channel);
+    public MessageReceiverGateway(String queue) {
+        super(queue);
 
         try {
             consumer = session.createConsumer(destination);
 
             connection.start();
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message receiver gateway", e);
+            log.log(SEVERE, "An error occurred while setting up a message receiver messaging", e);
         }
     }
 
