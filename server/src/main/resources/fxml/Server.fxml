@@ -4,17 +4,13 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="nl.mailsystem.server.ui.ServerFxmlController">
-    <children>
-        <VBox prefHeight="400.0" prefWidth="600.0" spacing="15.0">
-            <children>
-                <ListView fx:id="listViewInternalCorrespondence"/>
-                <ListView fx:id="listViewExternalCorrespondence"/>
-            </children>
-            <padding>
-                <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
-            </padding>
-        </VBox>
-    </children>
+    <VBox prefHeight="300.0" prefWidth="400.0" spacing="5.0">
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+        <ListView fx:id="listViewInternalCorrespondence"/>
+        <ListView fx:id="listViewExternalCorrespondence"/>
+    </VBox>
 </AnchorPane>

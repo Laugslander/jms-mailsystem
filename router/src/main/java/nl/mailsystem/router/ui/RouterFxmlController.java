@@ -1,6 +1,9 @@
 package nl.mailsystem.router.ui;
 
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import nl.mailsystem.common.domain.Correspondence;
 import nl.mailsystem.router.RouterController;
 
 import java.net.URL;
@@ -11,10 +14,11 @@ import java.util.ResourceBundle;
  */
 public class RouterFxmlController implements Initializable {
 
-    private RouterController controller;
+    @FXML
+    private ListView<Correspondence> listViewInternalCorrespondence, listViewExternalCorrespondence;
 
     RouterFxmlController(RouterController controller) {
-        this.controller = controller;
+
     }
 
     @Override

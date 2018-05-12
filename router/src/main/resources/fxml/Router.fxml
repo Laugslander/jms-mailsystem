@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="nl.mailsystem.router.ui.RouterFxmlController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<?import javafx.scene.layout.VBox?>
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="nl.mailsystem.router.ui.RouterFxmlController">
+    <VBox prefHeight="300.0" prefWidth="400.0" spacing="5.0">
+        <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </padding>
+        <ListView fx:id="listViewInternalCorrespondence"/>
+        <ListView fx:id="listViewExternalCorrespondence"/>
+    </VBox>
 </AnchorPane>
