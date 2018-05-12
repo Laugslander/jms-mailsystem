@@ -41,7 +41,8 @@ public class ClientFxmlController implements Initializable, MailEventListener {
 
     ClientFxmlController(ClientController controller) {
         this.controller = controller;
-        this.controller.setMailEventListener(this);
+
+        setListeners();
     }
 
     @Override
@@ -96,6 +97,10 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         textFieldTo.clear();
         textFieldSubject.clear();
         textAreaText.clear();
+    }
+
+    private void setListeners() {
+        this.controller.setMailEventListener(this);
     }
 
 }

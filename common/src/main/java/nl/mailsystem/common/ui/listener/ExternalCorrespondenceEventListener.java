@@ -1,4 +1,4 @@
-package nl.mailsystem.server.ui.listener;
+package nl.mailsystem.common.ui.listener;
 
 import nl.mailsystem.common.domain.Correspondence;
 

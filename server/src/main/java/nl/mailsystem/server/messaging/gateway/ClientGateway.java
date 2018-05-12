@@ -1,6 +1,5 @@
 package nl.mailsystem.server.messaging.gateway;
 
-import lombok.extern.java.Log;
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
@@ -16,7 +15,6 @@ import static nl.mailsystem.common.messaging.QueueConstants.SERVER_CLIENT_MAIL_Q
 /**
  * @author Robin Laugs
  */
-@Log
 public abstract class ClientGateway {
 
     protected ClientGateway(MailDomain domain) {

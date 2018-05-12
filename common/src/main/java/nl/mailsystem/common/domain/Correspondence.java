@@ -10,10 +10,10 @@ import static java.lang.String.format;
  */
 @Data
 @Builder
-public class Correspondence {
+public class Correspondence<T> {
 
-    private MailAddress sender;
-    private MailAddress receiver;
+    private T sender;
+    private T receiver;
     private String subject;
 
     @Override
