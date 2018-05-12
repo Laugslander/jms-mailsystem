@@ -8,8 +8,8 @@ import nl.mailsystem.common.domain.MailAddress;
 import nl.mailsystem.common.domain.MailDomain;
 import nl.mailsystem.common.ui.listener.ExternalCorrespondenceEventListener;
 import nl.mailsystem.common.ui.listener.InternalCorrespondenceEventListener;
-import nl.mailsystem.router.messaging.gateway.RouterGateway;
-import nl.mailsystem.router.messaging.gateway.ServerGateway;
+import nl.mailsystem.router.messaging.RouterGateway;
+import nl.mailsystem.router.messaging.ServerGateway;
 
 import java.util.Collection;
 import java.util.HashSet;

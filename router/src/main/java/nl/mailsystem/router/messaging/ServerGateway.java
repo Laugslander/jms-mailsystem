@@ -1,15 +1,12 @@
-package nl.mailsystem.router.messaging.gateway;
+package nl.mailsystem.router.messaging;
 
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailDomain;
 import nl.mailsystem.common.messaging.gateway.MessageSenderGateway;
-import nl.mailsystem.router.messaging.listener.ServerMailMessageListener;
-import nl.mailsystem.router.messaging.listener.ServerRegistrationMessageListener;
-
-import javax.jms.Message;
+import nl.mailsystem.common.messaging.listener.MessageListener;
 
 import static java.lang.String.format;
-import static nl.mailsystem.common.messaging.QueueConstants.ROUTER_SERVER_MAIL_QUEUE;
+import static nl.mailsystem.common.messaging.QueueConstants.*;
 
 /**
  * @author Robin Laugs
@@ -17,14 +14,14 @@ import static nl.mailsystem.common.messaging.QueueConstants.ROUTER_SERVER_MAIL_Q
 public abstract class ServerGateway {
 
     protected ServerGateway(String top) {
-        new ServerRegistrationMessageListener(top) {
+        new MessageListener<MailDomain>(format("%s_%s", SERVER_ROUTER_REGISTRATION_QUEUE, top)) {
             @Override
             protected void onMessage(MailDomain domain) {
                 onServerRegistration(domain);
             }
         };
 
-        new ServerMailMessageListener(top) {
+        new MessageListener<Mail>(format("%s_%s", SERVER_ROUTER_MAIL_QUEUE, top)) {
             @Override
             protected void onMessage(Mail mail) {
                 onServerMail(mail);
@@ -33,11 +30,7 @@ public abstract class ServerGateway {
     }
 
     public void sendMail(Mail mail, MailDomain receiver) {
-        MessageSenderGateway mailGateway = new MessageSenderGateway(format("%s_%s", ROUTER_SERVER_MAIL_QUEUE, receiver));
-
-        Message message = mailGateway.createObjectMessage(mail);
-
-        mailGateway.send(message);
+        new MessageSenderGateway<Mail>(format("%s_%s", ROUTER_SERVER_MAIL_QUEUE, receiver)).send(mail);
     }
 
     protected abstract void onServerRegistration(MailDomain domain);

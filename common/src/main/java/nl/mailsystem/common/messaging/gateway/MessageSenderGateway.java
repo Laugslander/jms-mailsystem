@@ -13,7 +13,7 @@ import static java.util.logging.Level.SEVERE;
  * @author Robin Laugs
  */
 @Log
-public class MessageSenderGateway extends BaseMessageGateway {
+public class MessageSenderGateway<T extends Serializable> extends BaseMessageGateway {
 
     private MessageProducer producer;
 
@@ -27,18 +27,10 @@ public class MessageSenderGateway extends BaseMessageGateway {
         }
     }
 
-    public Message createObjectMessage(Serializable object) {
+    public void send(T object) {
         try {
-            return session.createObjectMessage(object);
-        } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while creating an object message", e);
+            Message message = session.createObjectMessage(object);
 
-            return null;
-        }
-    }
-
-    public void send(Message message) {
-        try {
             producer.send(message);
         } catch (JMSException e) {
             log.log(SEVERE, "An error occurred while sending a message", e);
