@@ -17,8 +17,8 @@ public class MessageSenderGateway<T extends Serializable> extends BaseMessageGat
 
     private MessageProducer producer;
 
-    public MessageSenderGateway(String queue) {
-        super(queue);
+    public MessageSenderGateway(String queue, Object identifier) {
+        super(queue, identifier);
 
         try {
             producer = session.createProducer(destination);

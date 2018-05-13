@@ -28,15 +28,17 @@ abstract class BaseMessageGateway {
     Session session;
     Destination destination;
 
-    BaseMessageGateway(String queue) {
+    BaseMessageGateway(String queue, Object identifier) {
         try {
-            Properties properties = initProperties(queue);
+            String channel = format("%s_%s", queue, identifier);
+
+            Properties properties = initProperties(channel);
             Context context = new InitialContext(properties);
             ConnectionFactory factory = (ConnectionFactory) context.lookup(CONNECTION_FACTORY);
 
             connection = factory.createConnection();
             session = connection.createSession(false, AUTO_ACKNOWLEDGE);
-            destination = (Destination) context.lookup(queue);
+            destination = (Destination) context.lookup(channel);
         } catch (NamingException | JMSException e) {
             log.log(SEVERE, "An error occurred while setting up a message messaging", e);
         }

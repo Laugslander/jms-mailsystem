@@ -3,8 +3,10 @@ package nl.mailsystem.common.messaging.gateway;
 import lombok.extern.java.Log;
 
 import javax.jms.JMSException;
-import javax.jms.MessageConsumer;
+import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
+import java.io.Serializable;
 
 import static java.util.logging.Level.SEVERE;
 
@@ -12,28 +14,33 @@ import static java.util.logging.Level.SEVERE;
  * @author Robin Laugs
  */
 @Log
-public class MessageReceiverGateway extends BaseMessageGateway {
+public abstract class MessageReceiverGateway<T extends Serializable> extends BaseMessageGateway implements MessageListener {
 
-    private MessageConsumer consumer;
-
-    public MessageReceiverGateway(String queue) {
-        super(queue);
+    protected MessageReceiverGateway(String queue, Object identifier) {
+        super(queue, identifier);
 
         try {
-            consumer = session.createConsumer(destination);
+            session.createConsumer(destination).setMessageListener(this);
 
             connection.start();
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message receiver messaging", e);
+            log.log(SEVERE, "An error occurred while setting up a message receiver gateway", e);
         }
     }
 
-    public void setListener(MessageListener listener) {
+    @Override
+    @SuppressWarnings("unchecked")
+    public void onMessage(Message message) {
         try {
-            consumer.setMessageListener(listener);
+            ObjectMessage objectMessage = (ObjectMessage) message;
+            T object = (T) objectMessage.getObject();
+
+            onMessage(object);
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message listener", e);
+            log.log(SEVERE, "An error occurred while receiving a message", e);
         }
     }
+
+    protected abstract void onMessage(T object);
 
 }
