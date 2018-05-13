@@ -13,15 +13,10 @@ import static nl.mailsystem.common.messaging.QueueConstants.*;
  */
 public abstract class ServerGateway {
 
-    private MessageSenderGateway<MailAddress> registrationGateway;
-    private MessageSenderGateway<Mail> mailGateway;
+    private final MessageSenderGateway<MailAddress> registrationGateway;
+    private final MessageSenderGateway<Mail> mailGateway;
 
     protected ServerGateway(MailAddress address) {
-        initializeGateways(address);
-        registerMailAddress(address);
-    }
-
-    private void initializeGateways(MailAddress address) {
         MailDomain domain = address.getDomain();
 
         registrationGateway = new MessageSenderGateway<>(CLIENT_SERVER_REGISTRATION_QUEUE, domain);
@@ -29,10 +24,12 @@ public abstract class ServerGateway {
 
         new MessageReceiverGateway<Mail>(SERVER_CLIENT_MAIL_QUEUE, address) {
             @Override
-            protected void onMessage(Mail mail) {
+            public void onMessage(Mail mail) {
                 onServerMail(mail);
             }
         };
+
+        registerMailAddress(address);
     }
 
     private void registerMailAddress(MailAddress address) {
