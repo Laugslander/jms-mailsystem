@@ -41,7 +41,7 @@ public class RouterController {
             @Override
             protected void onServerRegistration(MailDomain domain) {
                 if (domains.add(domain)) {
-                    log.log(INFO, "Server with mail domain %s registered", domain);
+                    log.log(INFO, format("Server with mail domain %s registered", domain));
                 }
             }
 
@@ -66,7 +66,7 @@ public class RouterController {
             }
         };
 
-        log.log(INFO, format("Server with domain %s initialized", top));
+        log.log(INFO, format("Router with top %s initialized", top));
     }
 
     private void routeMail(Mail mail) {
@@ -78,7 +78,8 @@ public class RouterController {
         mail.getReceivers()
                 .stream()
                 .map(MailAddress::getDomain)
-                .filter(r -> domains.contains(r))
+                .filter(domains::contains)
+                .filter(r -> !mail.getSender().getDomain().equals(r))
                 .forEach(r -> sendMailToServer(mail, r));
     }
 

@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
+import static javafx.application.Platform.runLater;
 
 /**
  * @author Robin Laugs
@@ -59,7 +60,7 @@ public class ClientFxmlController implements Initializable, MailEventListener {
 
     @Override
     public void onMailEvent(Mail mail) {
-        listViewMails.getItems().add(mail);
+        runLater(() -> listViewMails.getItems().add(mail));
     }
 
     private void buttonSendClicked() {

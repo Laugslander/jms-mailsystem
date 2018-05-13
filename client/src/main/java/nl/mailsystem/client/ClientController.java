@@ -36,9 +36,7 @@ public class ClientController {
             @Override
             protected void onServerMail(Mail mail) {
                 if (mails.add(mail)) {
-                    log.log(INFO, format("Mail with subject %s received from server %s",
-                            mail.getSubject(),
-                            mail.getSender()));
+                    log.log(INFO, format("Mail with subject %s received from server", mail.getSubject()));
 
                     mailEventListener.onMailEvent(mail);
                 }

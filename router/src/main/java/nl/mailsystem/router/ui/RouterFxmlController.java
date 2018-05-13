@@ -13,6 +13,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static java.lang.String.format;
+import static javafx.application.Platform.runLater;
 
 /**
  * @author Robin Laugs
@@ -40,12 +41,12 @@ public class RouterFxmlController implements Initializable, InternalCorresponden
 
     @Override
     public void onInternalCorrespondenceEvent(Correspondence correspondence) {
-        listViewInternalCorrespondence.getItems().add(correspondence);
+        runLater(() -> listViewInternalCorrespondence.getItems().add(correspondence));
     }
 
     @Override
     public void onExternalCorrespondenceEvent(Correspondence correspondence) {
-        listViewExternalCorrespondence.getItems().add(correspondence);
+        runLater(() -> listViewExternalCorrespondence.getItems().add(correspondence));
     }
 
     private void setListeners() {
