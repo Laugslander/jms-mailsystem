@@ -2,10 +2,11 @@ package nl.mailsystem.router.messaging;
 
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailDomain;
-import nl.mailsystem.common.messaging.gateway.MessageReceiverGateway;
-import nl.mailsystem.common.messaging.gateway.MessageSenderGateway;
+import nl.mailsystem.common.messaging.gateway.ConsumerGateway;
+import nl.mailsystem.common.messaging.gateway.ProducerGateway;
 
 import static nl.mailsystem.common.messaging.QueueConstants.*;
+import static nl.mailsystem.common.messaging.gateway.DestinationType.QUEUE;
 
 /**
  * @author Robin Laugs
@@ -13,14 +14,14 @@ import static nl.mailsystem.common.messaging.QueueConstants.*;
 public abstract class ServerGateway {
 
     protected ServerGateway(String top) {
-        new MessageReceiverGateway<MailDomain>(SERVER_ROUTER_REGISTRATION_QUEUE, top) {
+        new ConsumerGateway<MailDomain>(QUEUE, SERVER_ROUTER_REGISTRATION_QUEUE, top) {
             @Override
             protected void onMessage(MailDomain domain) {
                 onServerRegistration(domain);
             }
         };
 
-        new MessageReceiverGateway<Mail>(SERVER_ROUTER_MAIL_QUEUE, top) {
+        new ConsumerGateway<Mail>(QUEUE, SERVER_ROUTER_MAIL_QUEUE, top) {
             @Override
             protected void onMessage(Mail mail) {
                 onServerMail(mail);
@@ -29,7 +30,7 @@ public abstract class ServerGateway {
     }
 
     public void sendMail(Mail mail, MailDomain receiver) {
-        new MessageSenderGateway<Mail>(ROUTER_SERVER_MAIL_QUEUE, receiver).send(mail);
+        new ProducerGateway<Mail>(QUEUE, ROUTER_SERVER_MAIL_QUEUE, receiver).send(mail);
     }
 
     protected abstract void onServerRegistration(MailDomain domain);

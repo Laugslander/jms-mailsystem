@@ -2,26 +2,27 @@ package nl.mailsystem.server.messaging;
 
 import nl.mailsystem.common.domain.Mail;
 import nl.mailsystem.common.domain.MailDomain;
-import nl.mailsystem.common.messaging.gateway.MessageReceiverGateway;
-import nl.mailsystem.common.messaging.gateway.MessageSenderGateway;
+import nl.mailsystem.common.messaging.gateway.ConsumerGateway;
+import nl.mailsystem.common.messaging.gateway.ProducerGateway;
 
 import static nl.mailsystem.common.messaging.QueueConstants.*;
+import static nl.mailsystem.common.messaging.gateway.DestinationType.QUEUE;
 
 /**
  * @author Robin Laugs
  */
 public abstract class RouterGateway {
 
-    private final MessageSenderGateway<MailDomain> registrationGateway;
-    private final MessageSenderGateway<Mail> mailGateway;
+    private final ProducerGateway<MailDomain> registrationGateway;
+    private final ProducerGateway<Mail> mailGateway;
 
     protected RouterGateway(MailDomain domain) {
         String top = domain.getTop();
 
-        registrationGateway = new MessageSenderGateway<>(SERVER_ROUTER_REGISTRATION_QUEUE, top);
-        mailGateway = new MessageSenderGateway<>(SERVER_ROUTER_MAIL_QUEUE, top);
+        registrationGateway = new ProducerGateway<>(QUEUE, SERVER_ROUTER_REGISTRATION_QUEUE, top);
+        mailGateway = new ProducerGateway<>(QUEUE, SERVER_ROUTER_MAIL_QUEUE, top);
 
-        new MessageReceiverGateway<Mail>(ROUTER_SERVER_MAIL_QUEUE, domain) {
+        new ConsumerGateway<Mail>(QUEUE, ROUTER_SERVER_MAIL_QUEUE, domain) {
             @Override
             protected void onMessage(Mail mail) {
                 onRouterMail(mail);

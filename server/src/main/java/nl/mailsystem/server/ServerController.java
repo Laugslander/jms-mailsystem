@@ -26,6 +26,8 @@ public class ServerController {
     @Getter
     private MailDomain domain;
 
+    private MailAddress broadcast;
+
     private Collection<MailAddress> addresses = new HashSet<>();
 
     private ClientGateway clientGateway;
@@ -36,6 +38,7 @@ public class ServerController {
 
     public ServerController(String domain) {
         this.domain = MailDomain.fromString(domain);
+        this.broadcast = MailAddress.fromString(format("all@%s", this.domain));
 
         clientGateway = new ClientGateway(this.domain) {
             @Override
@@ -71,6 +74,7 @@ public class ServerController {
 
     private void routeMail(Mail mail) {
         sendMailToClients(mail);
+        sendMailBroadcastToClients(mail);
         sendMailToRouters(mail);
     }
 
@@ -79,6 +83,13 @@ public class ServerController {
                 .stream()
                 .filter(r -> addresses.contains(r))
                 .forEach(r -> sendMailToClient(mail, r));
+    }
+
+    private void sendMailBroadcastToClients(Mail mail) {
+        mail.getReceivers()
+                .stream()
+                .filter(r -> broadcast.equals(r))
+                .forEach(r -> sendMailBroadcastToClient(mail));
     }
 
     private void sendMailToRouters(Mail mail) {
@@ -91,33 +102,33 @@ public class ServerController {
     private void sendMailToClient(Mail mail, MailAddress receiver) {
         clientGateway.sendMail(mail, receiver);
 
-        String subject = mail.getSubject();
+        internalCorrespondenceEventListener.onInternalCorrespondenceEvent(assembleCorrespondence(mail, receiver));
 
-        Correspondence correspondence = Correspondence.builder()
-                .sender(mail.getSender())
-                .receiver(receiver)
-                .subject(subject)
-                .build();
+        log.log(INFO, format("Mail with subject %s sent to client %s", mail.getSubject(), receiver));
+    }
 
-        internalCorrespondenceEventListener.onInternalCorrespondenceEvent(correspondence);
+    private void sendMailBroadcastToClient(Mail mail) {
+        clientGateway.sendMailBroadcast(mail);
 
-        log.log(INFO, format("Mail with subject %s sent to client %s", subject, receiver));
+        internalCorrespondenceEventListener.onInternalCorrespondenceEvent(assembleCorrespondence(mail, broadcast));
+
+        log.log(INFO, format("Mail with subject %s sent to all clients in domain %s", mail.getSubject(), domain));
     }
 
     private void sendMailToRouter(Mail mail, MailAddress receiver) {
         routerGateway.sendMail(mail);
 
-        String subject = mail.getSubject();
+        externalCorrespondenceEventListener.onExternalCorrespondenceEvent(assembleCorrespondence(mail, receiver));
 
-        Correspondence correspondence = Correspondence.builder()
+        log.log(INFO, format("Mail with subject %s sent to router %s", mail.getSubject(), receiver.getDomain().getTop()));
+    }
+
+    private Correspondence assembleCorrespondence(Mail mail, MailAddress receiver) {
+        return Correspondence.builder()
                 .sender(mail.getSender())
                 .receiver(receiver)
-                .subject(subject)
+                .subject(mail.getSubject())
                 .build();
-
-        externalCorrespondenceEventListener.onExternalCorrespondenceEvent(correspondence);
-
-        log.log(INFO, format("Mail with subject %s sent to router %s", subject, receiver.getDomain().getTop()));
     }
 
     public void setInternalCorrespondenceEventListener(InternalCorrespondenceEventListener listener) {

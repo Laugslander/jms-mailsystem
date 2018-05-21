@@ -16,6 +16,8 @@ public final class QueueConstants {
     public static final String ROUTER_SERVER_MAIL_QUEUE = "router_server_mail";
     public static final String ROUTER_ROUTER_MAIL_QUEUE = "router_router_mail";
 
+    public static final String SERVER_CLIENT_MAIL_TOPIC = "server_client_mail";
+
     private QueueConstants() {
         throw new UnsupportedOperationException(format("%s should not be instantiated",
                 QueueConstants.class.getSimpleName()));

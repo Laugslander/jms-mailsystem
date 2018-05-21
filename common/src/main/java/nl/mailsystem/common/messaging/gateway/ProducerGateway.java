@@ -13,17 +13,17 @@ import static java.util.logging.Level.SEVERE;
  * @author Robin Laugs
  */
 @Log
-public class MessageSenderGateway<T extends Serializable> extends BaseMessageGateway {
+public class ProducerGateway<T extends Serializable> extends BaseGateway {
 
     private MessageProducer producer;
 
-    public MessageSenderGateway(String queue, Object identifier) {
-        super(queue, identifier);
+    public ProducerGateway(DestinationType type, String queue, Object identifier) {
+        super(type, queue, identifier);
 
         try {
             producer = session.createProducer(destination);
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message sender messaging", e);
+            log.log(SEVERE, "An error occurred while setting up a message producer gateway", e);
         }
     }
 

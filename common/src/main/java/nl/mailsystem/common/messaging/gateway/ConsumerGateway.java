@@ -14,17 +14,17 @@ import static java.util.logging.Level.SEVERE;
  * @author Robin Laugs
  */
 @Log
-public abstract class MessageReceiverGateway<T extends Serializable> extends BaseMessageGateway implements MessageListener {
+public abstract class ConsumerGateway<T extends Serializable> extends BaseGateway implements MessageListener {
 
-    protected MessageReceiverGateway(String queue, Object identifier) {
-        super(queue, identifier);
+    protected ConsumerGateway(DestinationType type, String queue, Object identifier) {
+        super(type, queue, identifier);
 
         try {
             session.createConsumer(destination).setMessageListener(this);
 
             connection.start();
         } catch (JMSException e) {
-            log.log(SEVERE, "An error occurred while setting up a message receiver gateway", e);
+            log.log(SEVERE, "An error occurred while setting up a message consumer gateway", e);
         }
     }
 
