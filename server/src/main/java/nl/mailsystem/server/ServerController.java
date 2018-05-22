@@ -96,6 +96,7 @@ public class ServerController {
         mail.getReceivers()
                 .stream()
                 .filter(r -> !addresses.contains(r))
+                .filter(r -> !broadcast.equals(r))
                 .forEach(r -> sendMailToRouter(mail, r));
     }
 
