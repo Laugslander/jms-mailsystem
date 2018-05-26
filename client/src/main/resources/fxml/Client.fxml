@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="nl.mailsystem.client.ui.ClientFxmlController">
-    <SplitPane dividerPositions="0.6" orientation="VERTICAL" prefHeight="300.0" prefWidth="400.0">
+    <SplitPane dividerPositions="0.6" orientation="VERTICAL" prefHeight="300.0" prefWidth="500.0">
         <HBox>
-            <VBox prefWidth="200.0" spacing="5.0">
+            <VBox prefWidth="180.0" spacing="5.0">
                 <HBox.margin>
                     <Insets/>
                 </HBox.margin>

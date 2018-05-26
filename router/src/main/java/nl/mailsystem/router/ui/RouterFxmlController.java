@@ -13,6 +13,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import static java.lang.String.format;
+import static java.util.concurrent.Executors.newScheduledThreadPool;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static javafx.application.Platform.runLater;
 
 /**
@@ -37,6 +39,7 @@ public class RouterFxmlController implements Initializable, InternalCorresponden
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setLabels();
+        refreshPeriodically();
     }
 
     @Override
@@ -57,6 +60,15 @@ public class RouterFxmlController implements Initializable, InternalCorresponden
     private void setLabels() {
         labelInternalCorrespondence.setText(format("Internal mails - %s", controller.getTop()));
         labelExternalCorrespondence.setText("External mails");
+    }
+
+    private void refreshPeriodically() {
+        Runnable runnable = () -> {
+            listViewInternalCorrespondence.refresh();
+            listViewExternalCorrespondence.refresh();
+        };
+
+        newScheduledThreadPool(1).scheduleAtFixedRate(runnable, 0, 10, SECONDS);
     }
 
 }

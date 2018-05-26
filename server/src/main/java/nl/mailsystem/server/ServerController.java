@@ -129,6 +129,7 @@ public class ServerController {
                 .sender(mail.getSender())
                 .receiver(receiver)
                 .subject(mail.getSubject())
+                .timestamp(mail.getTimestamp())
                 .build();
     }
 

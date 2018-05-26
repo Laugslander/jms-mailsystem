@@ -20,6 +20,8 @@ import java.util.ResourceBundle;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
+import static java.util.concurrent.Executors.newScheduledThreadPool;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
 
@@ -58,6 +60,8 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         buttonSend.setOnMouseClicked(e -> buttonSendClicked());
 
         listViewMails.setOnMouseClicked(this::listViewMailsClicked);
+
+        refreshPeriodically();
     }
 
     @Override
@@ -130,6 +134,12 @@ public class ClientFxmlController implements Initializable, MailEventListener {
 
     private void setListeners() {
         this.controller.setMailEventListener(this);
+    }
+
+    private void refreshPeriodically() {
+        Runnable runnable = () -> listViewMails.refresh();
+
+        newScheduledThreadPool(1).scheduleAtFixedRate(runnable, 0, 10, SECONDS);
     }
 
 }

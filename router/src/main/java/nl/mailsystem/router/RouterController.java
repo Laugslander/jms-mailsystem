@@ -94,35 +94,27 @@ public class RouterController {
     private void sendMailToServer(Mail mail, MailDomain receiver) {
         serverGateway.sendMail(mail, receiver);
 
-        String subject = mail.getSubject();
+        internalCorrespondenceEventListener.onInternalCorrespondenceEvent(assembleCorrespondence(mail, receiver));
 
-        Correspondence correspondence = Correspondence.builder()
-                .sender(mail.getSender())
-                .receiver(receiver)
-                .subject(subject)
-                .build();
-
-        internalCorrespondenceEventListener.onInternalCorrespondenceEvent(correspondence);
-
-        log.log(INFO, format("Mail with subject %s sent to server %s", subject, receiver));
+        log.log(INFO, format("Mail with subject %s sent to server %s", mail.getSubject(), receiver));
     }
 
     private void sendMailToRouter(Mail mail, MailDomain receiver) {
         routerGateway.sendMail(mail, receiver.getTop());
 
-        String subject = mail.getSubject();
+        externalCorrespondenceEventListener.onExternalCorrespondenceEvent(assembleCorrespondence(mail, receiver));
 
-        Correspondence correspondence = Correspondence.builder()
-                .sender(mail.getSender())
-                .receiver(receiver)
-                .subject(subject)
-                .build();
-
-        externalCorrespondenceEventListener.onExternalCorrespondenceEvent(correspondence);
-
-        log.log(INFO, format("Mail with subject %s sent to router %s", subject, receiver.getTop()));
+        log.log(INFO, format("Mail with subject %s sent to router %s", mail.getSubject(), receiver.getTop()));
     }
 
+    private Correspondence assembleCorrespondence(Mail mail, MailDomain receiver) {
+        return Correspondence.builder()
+                .sender(mail.getSender())
+                .receiver(receiver)
+                .subject(mail.getSubject())
+                .timestamp(mail.getTimestamp())
+                .build();
+    }
 
     public void setInternalCorrespondenceEventListener(InternalCorrespondenceEventListener listener) {
         internalCorrespondenceEventListener = listener;
