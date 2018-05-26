@@ -24,8 +24,6 @@ public class Mail implements Serializable {
     @Singular
     private Collection<MailAddress> receivers;
 
-    private Mail reply;
-
     @Override
     public String toString() {
         return format("%s - %s", sender, subject);

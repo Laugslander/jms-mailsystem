@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import nl.mailsystem.client.ClientController;
 import nl.mailsystem.client.ui.listener.MailEventListener;
 import nl.mailsystem.common.domain.Mail;
@@ -16,6 +17,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
+import static java.lang.String.format;
 import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
@@ -55,7 +57,7 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         buttonSend.disableProperty().bind(inputCheck);
         buttonSend.setOnMouseClicked(e -> buttonSendClicked());
 
-        listViewMails.setOnMouseClicked(e -> listViewMailsClicked());
+        listViewMails.setOnMouseClicked(this::listViewMailsClicked);
     }
 
     @Override
@@ -71,13 +73,29 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         clearInput();
     }
 
-    private void listViewMailsClicked() {
+    private void listViewMailsClicked(MouseEvent event) {
         Mail mail = listViewMails.getSelectionModel().getSelectedItem();
 
-        if (!isNull(mail)) {
-            textFieldMailSubject.setText(mail.getSubject());
-            textAreaMailText.setText(mail.getText());
+        if (isNull(mail)) {
+            return;
         }
+
+        if (event.getClickCount() == 1) {
+            fillOutMailDetails(mail);
+        } else {
+            fillOutMailReply(mail);
+        }
+    }
+
+    private void fillOutMailDetails(Mail mail) {
+        textFieldMailSubject.setText(mail.getSubject());
+        textAreaMailText.setText(mail.getText());
+    }
+
+    private void fillOutMailReply(Mail mail) {
+        textFieldTo.setText(mail.getSender().toString());
+        textFieldSubject.setText(prependSubject(mail.getSubject()));
+        textAreaText.setFocusTraversable(false);
     }
 
     private Mail assembleMail() {
@@ -92,6 +110,16 @@ public class ClientFxmlController implements Initializable, MailEventListener {
         return stream(textFieldTo.getText().split(","))
                 .map(MailAddress::fromString)
                 .collect(toList());
+    }
+
+    private String prependSubject(String subject) {
+        String prependedSubject = format("RE: %s", subject);
+
+        if (subject.length() < 3) {
+            return prependedSubject;
+        }
+
+        return subject.substring(0, 3).equals("RE:") ? subject : prependedSubject;
     }
 
     private void clearInput() {
