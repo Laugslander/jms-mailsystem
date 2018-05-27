@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import javax.jms.*;
 import java.io.Serializable;
 
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 import static nl.mailsystem.common.messaging.MessagingConstants.STRING_PROPERTY_CLASS_NAME;
 
@@ -46,11 +47,17 @@ public class ProducerGateway<T extends Serializable> extends BaseGateway {
         TextMessage message = session.createTextMessage(json);
         message.setStringProperty(STRING_PROPERTY_CLASS_NAME, object.getClass().getName());
 
+        log.log(INFO, "Composed a text message");
+
         return message;
     }
 
     private ObjectMessage createObjectMessage(T object) throws JMSException {
-        return session.createObjectMessage(object);
+        ObjectMessage message = session.createObjectMessage(object);
+
+        log.log(INFO, "Composed an object message");
+
+        return message;
     }
 
 }

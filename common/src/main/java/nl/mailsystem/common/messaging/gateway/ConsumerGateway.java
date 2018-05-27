@@ -5,6 +5,7 @@ import lombok.extern.java.Log;
 import javax.jms.*;
 import java.io.Serializable;
 
+import static java.util.logging.Level.INFO;
 import static java.util.logging.Level.SEVERE;
 import static nl.mailsystem.common.messaging.MessagingConstants.STRING_PROPERTY_CLASS_NAME;
 
@@ -43,12 +44,17 @@ public abstract class ConsumerGateway<T extends Serializable> extends BaseGatewa
         String json = textMessage.getText();
         String className = textMessage.getStringProperty(STRING_PROPERTY_CLASS_NAME);
 
+        log.log(INFO, "Decomposed a text message");
+
         return (T) gson.fromJson(json, Class.forName(className));
     }
 
     @SuppressWarnings("unchecked")
     private T receiveObjectMessage(Message message) throws JMSException {
         ObjectMessage objectMessage = (ObjectMessage) message;
+
+        log.log(INFO, "Decomposed an object message");
+
         return (T) objectMessage.getObject();
     }
 
