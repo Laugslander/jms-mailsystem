@@ -5,7 +5,7 @@ import nl.mailsystem.common.domain.MailDomain;
 import nl.mailsystem.common.messaging.gateway.ConsumerGateway;
 import nl.mailsystem.common.messaging.gateway.ProducerGateway;
 
-import static nl.mailsystem.common.messaging.QueueConstants.*;
+import static nl.mailsystem.common.messaging.MessagingConstants.*;
 import static nl.mailsystem.common.messaging.gateway.DestinationType.QUEUE;
 
 /**

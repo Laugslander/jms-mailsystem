@@ -1,5 +1,6 @@
 package nl.mailsystem.common.messaging.gateway;
 
+import com.google.gson.Gson;
 import lombok.extern.java.Log;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
@@ -23,6 +24,8 @@ abstract class BaseGateway {
     Connection connection;
     Session session;
     Destination destination;
+
+    Gson gson = new Gson();
 
     BaseGateway(DestinationType type, String queue, Object identifier) {
         try {

@@ -2,13 +2,11 @@ package nl.mailsystem.common.messaging.gateway;
 
 import lombok.extern.java.Log;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
+import javax.jms.*;
 import java.io.Serializable;
 
 import static java.util.logging.Level.SEVERE;
+import static nl.mailsystem.common.messaging.MessagingConstants.STRING_PROPERTY_CLASS_NAME;
 
 /**
  * @author Robin Laugs
@@ -29,18 +27,29 @@ public abstract class ConsumerGateway<T extends Serializable> extends BaseGatewa
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void onMessage(Message message) {
         try {
-            ObjectMessage objectMessage = (ObjectMessage) message;
-            T object = (T) objectMessage.getObject();
-
-            onMessage(object);
-        } catch (JMSException e) {
+            onMessage(message instanceof TextMessage ? receiveTextMessage(message) : receiveObjectMessage(message));
+        } catch (JMSException | ClassNotFoundException e) {
             log.log(SEVERE, "An error occurred while receiving a message", e);
         }
     }
 
-    protected abstract void onMessage(T object);
+    protected abstract void onMessage(T message);
+
+    @SuppressWarnings("unchecked")
+    private T receiveTextMessage(Message message) throws JMSException, ClassNotFoundException {
+        TextMessage textMessage = (TextMessage) message;
+        String json = textMessage.getText();
+        String className = textMessage.getStringProperty(STRING_PROPERTY_CLASS_NAME);
+
+        return (T) gson.fromJson(json, Class.forName(className));
+    }
+
+    @SuppressWarnings("unchecked")
+    private T receiveObjectMessage(Message message) throws JMSException {
+        ObjectMessage objectMessage = (ObjectMessage) message;
+        return (T) objectMessage.getObject();
+    }
 
 }

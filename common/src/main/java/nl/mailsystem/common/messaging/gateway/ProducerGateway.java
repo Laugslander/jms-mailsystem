@@ -2,12 +2,11 @@ package nl.mailsystem.common.messaging.gateway;
 
 import lombok.extern.java.Log;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageProducer;
+import javax.jms.*;
 import java.io.Serializable;
 
 import static java.util.logging.Level.SEVERE;
+import static nl.mailsystem.common.messaging.MessagingConstants.STRING_PROPERTY_CLASS_NAME;
 
 /**
  * @author Robin Laugs
@@ -28,13 +27,30 @@ public class ProducerGateway<T extends Serializable> extends BaseGateway {
     }
 
     public void send(T object) {
+        send(object, false);
+    }
+
+    public void send(T object, boolean json) {
         try {
-            Message message = session.createObjectMessage(object);
+            Message message = json ? createTextMessage(object) : createObjectMessage(object);
 
             producer.send(message);
         } catch (JMSException e) {
             log.log(SEVERE, "An error occurred while sending a message", e);
         }
+    }
+
+    private TextMessage createTextMessage(T object) throws JMSException {
+        String json = gson.toJson(object);
+
+        TextMessage message = session.createTextMessage(json);
+        message.setStringProperty(STRING_PROPERTY_CLASS_NAME, object.getClass().getName());
+
+        return message;
+    }
+
+    private ObjectMessage createObjectMessage(T object) throws JMSException {
+        return session.createObjectMessage(object);
     }
 
 }
