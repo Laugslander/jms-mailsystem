@@ -30,6 +30,8 @@ import static javafx.application.Platform.runLater;
  */
 public class ClientFxmlController implements Initializable, MailEventListener {
 
+    private static final String REPLY_PREFIX = "RE:";
+
     @FXML
     private TextField textFieldSubject, textFieldTo, textFieldMailSubject;
 
@@ -117,13 +119,13 @@ public class ClientFxmlController implements Initializable, MailEventListener {
     }
 
     private String prependSubject(String subject) {
-        String prependedSubject = format("RE: %s", subject);
+        String prependedSubject = format("%s %s", REPLY_PREFIX, subject);
 
-        if (subject.length() < 3) {
+        if (subject.length() < REPLY_PREFIX.length()) {
             return prependedSubject;
         }
 
-        return subject.substring(0, 3).equals("RE:") ? subject : prependedSubject;
+        return subject.substring(0, REPLY_PREFIX.length()).equals(REPLY_PREFIX) ? subject : prependedSubject;
     }
 
     private void clearInput() {
@@ -137,9 +139,8 @@ public class ClientFxmlController implements Initializable, MailEventListener {
     }
 
     private void refreshPeriodically() {
-        Runnable runnable = () -> listViewMails.refresh();
-
-        newScheduledThreadPool(1).scheduleAtFixedRate(runnable, 0, 10, SECONDS);
+        newScheduledThreadPool(1)
+                .scheduleAtFixedRate(listViewMails::refresh, 0, 10, SECONDS);
     }
 
 }

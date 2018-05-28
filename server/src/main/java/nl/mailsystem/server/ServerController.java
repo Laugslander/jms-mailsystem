@@ -81,14 +81,14 @@ public class ServerController {
     private void sendMailToClients(Mail mail) {
         mail.getReceivers()
                 .stream()
-                .filter(r -> addresses.contains(r))
+                .filter(addresses::contains)
                 .forEach(r -> sendMailToClient(mail, r));
     }
 
     private void sendMailBroadcastToClients(Mail mail) {
         mail.getReceivers()
                 .stream()
-                .filter(r -> broadcast.equals(r))
+                .filter(broadcast::equals)
                 .forEach(r -> sendMailBroadcastToClient(mail));
     }
 

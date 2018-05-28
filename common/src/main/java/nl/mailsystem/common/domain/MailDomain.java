@@ -6,6 +6,8 @@ import lombok.extern.java.Log;
 
 import java.io.Serializable;
 
+import static java.lang.String.format;
+
 /**
  * @author Robin Laugs
  */
@@ -28,7 +30,7 @@ public class MailDomain implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("%s.%s", second, top);
+        return format("%s.%s", second, top);
     }
 
 }
